@@ -15,3 +15,8 @@ TEST(TestRpn, singleNumberInputReturnsThisNumber)
 {
     EXPECT_EQ(2048, rpn::calculate("2048"));
 }
+
+TEST(TestRpn, twoNumbersWithoutOperatorCauseInvalidInputException)
+{
+    EXPECT_THROW(rpn::calculate("2 2"), rpn::InvalidInputException);
+}
