@@ -10,3 +10,8 @@ TEST(TestRpn, nonNumericInputCausesInvalidInputException)
 {
     EXPECT_THROW(rpn::calculate("ple"), rpn::InvalidInputException);
 }
+
+TEST(TestRpn, singleNumberInputReturnsThisNumber)
+{
+    EXPECT_EQ(2048, rpn::calculate("2048"));
+}
