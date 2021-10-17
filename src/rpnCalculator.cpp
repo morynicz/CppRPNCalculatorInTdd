@@ -11,52 +11,60 @@ namespace
 using Stack = std::list<ResultType>;
 using Operator = std::function<ResultType(ResultType, ResultType)>;
 
-std::map<char, Operator> operators{
+const std::map<char, Operator> operators{
     { '+', [](ResultType lhs, ResultType rhs) { return lhs + rhs; } },
     { '-', [](ResultType lhs, ResultType rhs) { return lhs - rhs; } }
 };
 
-std::tuple<ResultType, ResultType> pop2(Stack& stack)
+class WorkStack
 {
-    auto arg1 = stack.front();
-    stack.pop_front();
-    auto arg2 = stack.front();
-    stack.pop_front();
-    return { arg1, arg2 };
-}
+  public:
+    void applyOperation(const Operator& op)
+    {
+        const auto [arg1, arg2] = pop2();
+        stack.push_front(op(arg2, arg1));
+    }
 
-void applyOperation(Stack& stack, const Operator& op)
-{
-    const auto [arg1, arg2] = pop2(stack);
-    stack.push_front(op(arg2, arg1));
-}
+    void storeNumber(const std::string number)
+    try
+    {
+        stack.push_front(std::stoi(number));
+    }
+    catch (const std::invalid_argument)
+    {
+        throw InvalidInputException("non numeric input");
+    }
 
-void storeNumber(Stack& stack, const std::string number)
-try
-{
-    stack.push_front(std::stoi(number));
-}
-catch (const std::invalid_argument)
-{
-    throw InvalidInputException("non numeric input");
-}
+    Stack getStack() const { return stack; }
+
+  private:
+    std::list<ResultType> stack;
+    std::tuple<ResultType, ResultType> pop2()
+    {
+        auto arg1 = stack.front();
+        stack.pop_front();
+        auto arg2 = stack.front();
+        stack.pop_front();
+        return { arg1, arg2 };
+    }
+};
 
 template<typename T>
 auto calculateResult(const T& tokens)
 {
-    Stack stack;
+    WorkStack stack;
 
     for (const std::string& token : tokens)
     {
         if (const auto operation = operators.find(token.back());
             operation != operators.end())
         {
-            applyOperation(stack, operation->second);
+            stack.applyOperation(operation->second);
             continue;
         }
-        storeNumber(stack, token);
+        stack.storeNumber(token);
     }
-    return stack;
+    return stack.getStack();
 }
 }
 
