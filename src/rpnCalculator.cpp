@@ -1,7 +1,6 @@
 #include "rpnCalculator.hpp"
 #include <boost/range/adaptor/tokenized.hpp>
 #include <list>
-#include <sstream>
 
 namespace rpn
 {
@@ -14,6 +13,15 @@ auto calculateResult(const T& tokens)
 
     for (const auto& token : tokens)
     {
+        if ("+" == token)
+        {
+            auto arg1 = stack.front();
+            stack.pop_front();
+            auto arg2 = stack.front();
+            stack.pop_front();
+            stack.push_front(arg1 + arg2);
+            continue;
+        }
         try
         {
             stack.push_front(std::stoi(token));
@@ -34,7 +42,7 @@ ResultType calculate(const std::string& input)
         return 0;
     }
 
-    auto tokens = input | boost::adaptors::tokenized(boost::regex("\\w+"));
+    auto tokens = input | boost::adaptors::tokenized(boost::regex("[+\\w]+"));
     auto stack = calculateResult(tokens);
 
     if (stack.size() != 1)
