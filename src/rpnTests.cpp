@@ -20,3 +20,8 @@ TEST(TestRpn, twoNumbersWithoutOperatorCauseInvalidInputException)
 {
     EXPECT_THROW(rpn::calculate("2 2"), rpn::InvalidInputException);
 }
+
+TEST(TestRpn, twoPlusTwoReturnsFour)
+{
+    EXPECT_EQ(rpn::calculate("2 2 +"), 4);
+}
