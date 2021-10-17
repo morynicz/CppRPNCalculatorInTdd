@@ -5,3 +5,8 @@ TEST(TestRpn, emptyInputReturnsZero)
 {
     EXPECT_EQ(0, rpn::calculate(""));
 }
+
+TEST(TestRpn, nonNumericInputCausesInvalidInputException)
+{
+    EXPECT_THROW(rpn::calculate("ple"), InvalidInputException);
+}
