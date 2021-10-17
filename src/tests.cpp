@@ -8,5 +8,5 @@ TEST(TestRpn, emptyInputReturnsZero)
 
 TEST(TestRpn, nonNumericInputCausesInvalidInputException)
 {
-    EXPECT_THROW(rpn::calculate("ple"), InvalidInputException);
+    EXPECT_THROW(rpn::calculate("ple"), rpn::InvalidInputException);
 }
