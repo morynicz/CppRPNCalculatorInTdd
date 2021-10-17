@@ -9,5 +9,7 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(googletest)
 
+add_library(rpn src/rpnCalculator.cpp)
+
 add_executable(tests src/tests.cpp)
-target_link_libraries(tests gtest_main)
+target_link_libraries(tests gtest_main rpn)

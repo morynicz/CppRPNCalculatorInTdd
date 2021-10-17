@@ -1,11 +1,7 @@
 #include "gtest/gtest.h"
-
-int calculate(std::string)
-{
-    return 0;
-}
+#include "rpnCalculator.hpp"
 
 TEST(TestRpn,emptyInputReturnsZero)
 {
-    EXPECT_EQ(0, calculate(""));
+    EXPECT_EQ(0, rpn::calculate(""));
 }
