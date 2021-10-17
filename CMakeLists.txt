@@ -13,3 +13,7 @@ add_library(rpn src/rpnCalculator.cpp)
 
 add_executable(tests src/tests.cpp)
 target_link_libraries(tests gtest_main rpn)
+
+add_custom_target(run_tests
+                  COMMAND tests
+                  DEPENDS tests)
