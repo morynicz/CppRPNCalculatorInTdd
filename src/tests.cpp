@@ -1,5 +1,5 @@
-#include "gtest/gtest.h"
 #include "rpnCalculator.hpp"
+#include "gtest/gtest.h"
 
 TEST(TestRpn, emptyInputReturnsZero)
 {
