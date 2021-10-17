@@ -15,7 +15,7 @@ add_library(rpn src/rpnCalculator.cpp)
 target_link_libraries(rpn ${Boost_REGEX_LIBRARY})
 target_compile_features(rpn PUBLIC cxx_std_20)
 
-add_executable(tests src/tests.cpp)
+add_executable(tests src/rpnTests.cpp)
 target_link_libraries(tests gtest_main rpn)
 target_compile_features(tests PUBLIC cxx_std_20)
 
