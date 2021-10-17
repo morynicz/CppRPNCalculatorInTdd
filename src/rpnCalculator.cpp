@@ -5,15 +5,13 @@
 
 namespace rpn
 {
-ResultType calculate(const std::string& input)
+namespace
+{
+template<typename T>
+auto calculateResult(const T& tokens)
 {
     std::list<ResultType> stack;
-    if (input.size() == 0)
-    {
-        return 0;
-    }
 
-    auto tokens = input | boost::adaptors::tokenized(boost::regex("\\w+"));
     for (const auto& token : tokens)
     {
         try
@@ -25,6 +23,20 @@ ResultType calculate(const std::string& input)
             throw InvalidInputException("non numeric input");
         }
     }
+    return stack;
+}
+}
+
+ResultType calculate(const std::string& input)
+{
+    if (input.size() == 0)
+    {
+        return 0;
+    }
+
+    auto tokens = input | boost::adaptors::tokenized(boost::regex("\\w+"));
+    auto stack = calculateResult(tokens);
+
     if (stack.size() != 1)
     {
         throw InvalidInputException("malformed operation");
