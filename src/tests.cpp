@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 
-TEST(a,a)
+TEST(TestRpn,emptyInputReturnsZero)
 {
-    EXPECT_TRUE(false);
+    EXPECT_EQ(0, calculate(""));
 }
