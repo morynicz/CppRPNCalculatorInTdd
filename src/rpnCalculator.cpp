@@ -1,4 +1,5 @@
 #include "rpnCalculator.hpp"
+#include <boost/range/adaptor/tokenized.hpp>
 #include <list>
 #include <sstream>
 
@@ -11,24 +12,19 @@ ResultType calculate(const std::string& input)
     {
         return 0;
     }
-    auto start = 0;
-    do
+
+    auto tokens = input | boost::adaptors::tokenized(boost::regex("\\w+"));
+    for (const auto& token : tokens)
     {
-        auto end = input.find(' ', start);
         try
         {
-            stack.push_front(std::stoi(input.substr(start, end)));
-            start = end + 1;
-            if (end == std::string::npos)
-            {
-                break;
-            }
+            stack.push_front(std::stoi(token));
         }
         catch (const std::invalid_argument)
         {
             throw InvalidInputException("non numeric input");
         }
-    } while (true);
+    }
     if (stack.size() != 1)
     {
         throw InvalidInputException("malformed operation");

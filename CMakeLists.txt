@@ -9,10 +9,15 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(googletest)
 
+find_package(Boost REQUIRED COMPONENTS regex)
+
 add_library(rpn src/rpnCalculator.cpp)
+target_link_libraries(rpn ${Boost_REGEX_LIBRARY})
+target_compile_features(rpn PUBLIC cxx_std_20)
 
 add_executable(tests src/tests.cpp)
 target_link_libraries(tests gtest_main rpn)
+target_compile_features(tests PUBLIC cxx_std_20)
 
 add_custom_target(run_tests
                   COMMAND tests
