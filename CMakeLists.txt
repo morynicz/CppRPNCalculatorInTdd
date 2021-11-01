@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.11)
+cmake_minimum_required(VERSION 3.12)
 project(CppRpnCalculatorInTdd CXX)
 
 include(FetchContent)
@@ -9,10 +9,7 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(googletest)
 
-find_package(Boost REQUIRED COMPONENTS regex)
-
 add_library(rpn src/rpnCalculator.cpp)
-target_link_libraries(rpn ${Boost_REGEX_LIBRARY})
 target_compile_features(rpn PUBLIC cxx_std_20)
 
 add_executable(tests src/rpnTests.cpp)

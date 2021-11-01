@@ -1,8 +1,9 @@
 #include "rpnCalculator.hpp"
-#include <boost/range/adaptor/tokenized.hpp>
+#include <algorithm>
 #include <functional>
 #include <list>
 #include <map>
+#include <ranges>
 
 namespace rpn
 {
@@ -25,7 +26,7 @@ class WorkStack
         stack.push_front(op(arg2, arg1));
     }
 
-    void storeNumber(const std::string number)
+    void storeNumber(const std::string& number)
     try
     {
         stack.push_front(std::stoi(number));
@@ -49,21 +50,21 @@ class WorkStack
     }
 };
 
-template<typename T>
-auto calculateResult(const T& tokens)
+auto calculateResult(auto tokens)
 {
     WorkStack stack;
-
-    for (const std::string& token : tokens)
+    auto operate = [&stack](const std::string& token) -> void
     {
         if (const auto operation = operators.find(token.back());
             operation != operators.end())
         {
             stack.applyOperation(operation->second);
-            continue;
+            return;
         }
-        stack.storeNumber(token);
-    }
+        stack.storeNumber(std::string{ token });
+    };
+
+    std::ranges::for_each(tokens, operate);
     return stack.getStack();
 }
 }
@@ -75,7 +76,16 @@ ResultType calculate(const std::string& input)
         return 0;
     }
 
-    auto tokens = input | boost::adaptors::tokenized(boost::regex("[+-\\w]+"));
+    auto tokens = input | std::views::split(' ') |
+                  std::views::transform(
+                      [](auto&& rng) { // TODO: find a better way to convert
+                                       // damned split_view element to a string
+                          std::string result;
+                          std::ranges::copy(rng.begin(),
+                                            rng.end(),
+                                            std::back_inserter(result));
+                          return result;
+                      });
     auto stack = calculateResult(tokens);
 
     if (stack.size() != 1)
